@@ -43,7 +43,19 @@
           </div>
           <div class="group bordered filled">
             <label for="date">Date</label>
-            <v-ctk v-model="form.due_date" id="date-range" :format="'DD/MM/YYYY'" :only-date="true" :no-label="true" :no-button="true" :formatted="'DD/MM/YYYY'" name="due_date" data-vv-name="due_date" :range="false" :disabled-dates="disabledDates"></v-ctk>
+            <v-ctk 
+              v-model="form.due_date" 
+              id="date-range" 
+              :format="'DD/MM/YYYY'" 
+              :only-date="true" 
+              :no-label="true" 
+              :no-button="true" 
+              :formatted="'DD/MM/YYYY'" 
+              name="due_date" 
+              data-vv-name="due_date" 
+              :range="false" 
+              :disabled-dates="disabledDates">
+            </v-ctk>
             <transition name="slide"><span class="validate" v-if="errors.has('due_date')">{{ properFormat(errors.first('due_date')) }}</span></transition>
           </div>
           <button type="submit" class="primary_button pointer ml ten">Save</button>
@@ -81,31 +93,31 @@
     methods: {
       createTask() {
         this.$validator.validateAll().then(valid => {
-            if (valid) {
-              this.$axios.post(`/tasks/task`, this.form).then(res => {
-                this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'Task Created!' })
-                setTimeout(() => {
-                  this.$router.push('/tasks')
-                }, 300);
-              }).catch(err => {
-                this.$store.commit('global/catcher/populateErrors', { items: err.response.data.errors })
-              }).then(() => {
-                setTimeout( () => {
-                  this.$store.commit('global/loader/checkLoader', { status: false })
-                  document.body.classList.remove('no_scroll', 'no_click')
-                }, 500)
-                this.loaded = true
-              })
-            } else {
-                this.$scrollTo('.validate', {
-                offset: -250
+          if (valid) {
+            this.$axios.post(`/tasks/task`, this.form).then(res => {
+              this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'Task Created!' })
+              setTimeout(() => {
+                this.$router.push('/tasks')
+              }, 300);
+            }).catch(err => {
+              this.$store.commit('global/catcher/populateErrors', { items: err.response.data.errors })
+            }).then(() => {
+              setTimeout( () => {
+                this.$store.commit('global/loader/checkLoader', { status: false })
+                document.body.classList.remove('no_scroll', 'no_click')
+              }, 500)
+              this.loaded = true
             })
-            }
+          } else {
+            this.$scrollTo('.validate', {
+              offset: -250
+            })
+          }
         })
       },
       initialization() {
-        this.form.due_date = this.$moment().format('DD/MM/YY')
-        this.loaded = true
+      this.form.due_date = this.$moment().format('DD/MM/YY')
+      this.loaded = true
       }
     },
     mounted() {

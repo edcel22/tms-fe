@@ -43,7 +43,19 @@
           </div>
           <div class="group bordered filled">
             <label for="date">Date</label>
-            <v-ctk v-model="form.due_date" id="date-range" :format="'DD/MM/YYYY'" :only-date="true" :no-label="true" :no-button="true" :formatted="'DD/MM/YYYY'" name="due_date" data-vv-name="due_date" :range="false" :disabled-dates="disabledDates"></v-ctk>
+            <v-ctk 
+              v-model="form.due_date" 
+              id="date-range" 
+              :format="'DD/MM/YYYY'" 
+              :only-date="true" 
+              :no-label="true" 
+              :no-button="true" 
+              :formatted="'DD/MM/YYYY'" 
+              name="due_date" 
+              data-vv-name="due_date" 
+              :range="false" 
+              :disabled-dates="disabledDates">
+            </v-ctk>
             <transition name="slide"><span class="validate" v-if="errors.has('due_date')">{{ properFormat(errors.first('due_date')) }}</span></transition>
           </div>
           <button type="submit" class="primary_button pointer ml ten">Update</button>
@@ -85,33 +97,33 @@
           formData.append('_method', 'PATCH')
         
           if (valid) {
-              this.$axios.post(`/tasks/task/${this.$route.params.id}`, formData).then(res => {
-                this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'Task Updated!' })
-              })
-              setTimeout(() => {
-                this.$router.push(`/tasks`)
-              }, 300);
-            } else {
-                me.$scrollTo('.validate', {
-                offset: -250
+            this.$axios.post(`/tasks/task/${this.$route.params.id}`, formData).then(res => {
+              this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'Task Updated!' })
+            })
+            setTimeout(() => {
+              this.$router.push(`/tasks`)
+            }, 300);
+          } else {
+            me.$scrollTo('.validate', {
+              offset: -250
             })
           }
         })
       },
       fetchData() {
         this.$axios.get(`/tasks/task/${this.$route.params.id}`).then(res => {
-            this.form.title = res.data.task.title
-            this.form.description = res.data.task.description
-            this.form.completion_status = res.data.task.completion_status
-            this.form.due_date = res.data.task.due_date
+          this.form.title = res.data.task.title
+          this.form.description = res.data.task.description
+          this.form.completion_status = res.data.task.completion_status
+          this.form.due_date = res.data.task.due_date
         }).catch(err => {
-            this.$store.commit('global/catcher/populateErrors', { items: err.response.data.errors })
+          this.$store.commit('global/catcher/populateErrors', { items: err.response.data.errors })
         }).then(() => {
-            setTimeout( () => {
-                this.$store.commit('global/loader/checkLoader', { status: false })
-                document.body.classList.remove('no_scroll', 'no_click')
-            }, 500)
-            this.loaded = true
+          setTimeout( () => {
+            this.$store.commit('global/loader/checkLoader', { status: false })
+            document.body.classList.remove('no_scroll', 'no_click')
+          }, 500)
+          this.loaded = true
         })
       }
     },

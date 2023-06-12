@@ -9,7 +9,6 @@
     middleware: ['login'],
   }
 </script>
-<!-- Component's internal Css -->
 <style lang="stylus">
   #login
     width: 100%
