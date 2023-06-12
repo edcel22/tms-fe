@@ -5,7 +5,8 @@
 </template>
 <script>
   export default {
-    auth: false
+    auth: false,
+    middleware: ['login'],
   }
 </script>
 <!-- Component's internal Css -->
