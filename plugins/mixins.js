@@ -30,6 +30,11 @@ Vue.mixin({
         
             return disabledDates;
         },
+        activeStatus(value) {
+            let status = (value) ? 'Active' : 'InActive'
+            
+            return status
+        },
         completionStatus(value) {
             let status = (value) ? 'Completed' : 'Incomplete'
             
