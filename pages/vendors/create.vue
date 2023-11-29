@@ -1,11 +1,11 @@
 <template>
-  <div id="update_customer" class="page" v-if="loaded">
+  <div id="create_vendor" class="page" v-if="loaded">
     <div class="box mb">
       <div class="top_box inline">
-        <h2>Update Customer</h2>
+        <h2>Create Vendor</h2>
       </div>
       <div class="bottom_box">
-        <form id="updateCustomerForm" class="content_middle form" @submit.prevent="updateCustomerUser()">
+        <form id="CreateVendorForm" class="content_middle form" @submit.prevent="createVendorUser()">
           <div class="group_inline three">
             <div class="group bordered filled">
               <label for="first_name">Fist Name *</label>
@@ -46,9 +46,19 @@
               <input type="text" class="input" name="contact_number" autocomplete="off" v-model="form.contact_number"  v-validate="{ required: true }" />
               <transition name="slide"><span class="validate" v-if="errors.has('contact_number')">{{ properFormat(errors.first('contact_number')) }}</span></transition>
             </div>
+            <div class="group bordered filled">
+              <label for="password">Password</label>
+              <input type="password" class="input" ref="password" name="password" autocomplete="off" v-model="form.password"  v-validate="{ required: true, min: 8 }" />
+              <transition name="slide"><span class="validate" v-if="errors.has('password')">{{ properFormat(errors.first('password')) }}</span></transition>
+            </div>
+            <div class="group bordered filled">
+              <label for="password_confirmation">Confirm Password</label>
+              <input type="password" class="input" name="password_confirmation" autocomplete="off" v-model="form.password_confirmation" v-validate="{ required: true, min: 8, confirmed: 'password' }" />
+              <transition name="slide"><span class="validate" v-if="errors.has('password_confirmation')">{{ properFormat(errors.first('password_confirmation')) }}</span></transition>
+            </div>
           </div>
           <button type="submit" class="primary_button pointer ml ten">Save</button>
-          <nuxt-link to="/customers" class="cancel_button pointer ml ten" >Cancel</nuxt-link>
+          <nuxt-link to="/vendors" class="cancel_button pointer ml ten" >Cancel</nuxt-link>
         </form>
       </div>
     </div>
@@ -61,7 +71,9 @@
         loaded: false,
         form: {
           email: '',
-          role_id: 3, 
+          password: '',
+          password_confirmation: '',
+          role_id: 2, 
           first_name: '',
           last_name: '',
           name: '',
@@ -69,33 +81,21 @@
           address: '',
           city: '',
           zip: ''
-        },
-        statuses: [
-          {
-            name: 'Active',
-            value: 1
-          },
-          {
-            name: 'InActive',
-            value: 0
-          }
-        ]
+        }
       }
     },
     methods: {
-      updateCustomerUser() {
+      createVendorUser() {
         this.$validator.validateAll().then(valid => {
           if (valid) {
-            let formData = new FormData(document.getElementById('updateCustomerForm'))
+            let formData = new FormData(document.getElementById('CreateVendorForm'))
             formData.append('name', this.form.first_name +" "+ this.form.last_name)
             formData.append('role_id', this.form.role_id)
-            formData.append("id", this.$route.params.id)
-            formData.append('_method', 'PATCH')
 
-            this.$axios.post(`users/${this.$route.params.id}`, formData).then(res => {
-              this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'customer Created!' })
+            this.$axios.post(`/create-user`, formData).then(res => {
+              this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'Vendor Created!' })
               setTimeout(() => {
-                this.$router.push('/customers')
+                this.$router.push('/vendors')
               }, 300);
             }).catch(err => {
               this.$store.commit('global/catcher/populateErrors', { items: err.response.data.errors })
@@ -113,29 +113,12 @@
           }
         })
       },
-      fetchData() {
-        this.$axios.get(`/customers/${this.$route.params.id}`).then(res => {
-          this.form.name = res.data.data.name
-          this.form.first_name = res.data.data.user_detail.first_name
-          this.form.last_name = res.data.data.user_detail.last_name
-          this.form.address = res.data.data.user_detail.address
-          this.form.city = res.data.data.user_detail.city
-          this.form.zip = res.data.data.user_detail.zip
-          this.form.contact_number = res.data.data.user_detail.contact_number
-          this.form.email = res.data.data.email
-        }).catch(err => {
-          this.$store.commit('global/catcher/populateErrors', { items: err.response.data.errors })
-        }).then(() => {
-          setTimeout( () => {
-            this.$store.commit('global/loader/checkLoader', { status: false })
-            document.body.classList.remove('no_scroll', 'no_click')
-          }, 500)
-          this.loaded = true
-        })
+      initialization() {
+      this.loaded = true
       }
     },
     mounted() {
-      this.fetchData()
+      this.initialization()
     }
   }
 </script>

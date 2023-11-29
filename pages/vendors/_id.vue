@@ -1,11 +1,11 @@
 <template>
-  <div id="update_customer" class="page" v-if="loaded">
+  <div id="update_vendor" class="page" v-if="loaded">
     <div class="box mb">
       <div class="top_box inline">
-        <h2>Update Customer</h2>
+        <h2>Update Vendor</h2>
       </div>
       <div class="bottom_box">
-        <form id="updateCustomerForm" class="content_middle form" @submit.prevent="updateCustomerUser()">
+        <form id="updateVendorForm" class="content_middle form" @submit.prevent="updateVendorUser()">
           <div class="group_inline three">
             <div class="group bordered filled">
               <label for="first_name">Fist Name *</label>
@@ -48,7 +48,7 @@
             </div>
           </div>
           <button type="submit" class="primary_button pointer ml ten">Save</button>
-          <nuxt-link to="/customers" class="cancel_button pointer ml ten" >Cancel</nuxt-link>
+          <nuxt-link to="/vendors" class="cancel_button pointer ml ten" >Cancel</nuxt-link>
         </form>
       </div>
     </div>
@@ -61,7 +61,7 @@
         loaded: false,
         form: {
           email: '',
-          role_id: 3, 
+          role_id: 2, 
           first_name: '',
           last_name: '',
           name: '',
@@ -83,19 +83,19 @@
       }
     },
     methods: {
-      updateCustomerUser() {
+      updateVendorUser() {
         this.$validator.validateAll().then(valid => {
           if (valid) {
-            let formData = new FormData(document.getElementById('updateCustomerForm'))
+            let formData = new FormData(document.getElementById('updateVendorForm'))
             formData.append('name', this.form.first_name +" "+ this.form.last_name)
             formData.append('role_id', this.form.role_id)
             formData.append("id", this.$route.params.id)
             formData.append('_method', 'PATCH')
 
             this.$axios.post(`users/${this.$route.params.id}`, formData).then(res => {
-              this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'customer Created!' })
+              this.$store.dispatch('global/toast/addToast', { type: 'success', message: 'vendor Created!' })
               setTimeout(() => {
-                this.$router.push('/customers')
+                this.$router.push('/vendors')
               }, 300);
             }).catch(err => {
               this.$store.commit('global/catcher/populateErrors', { items: err.response.data.errors })
@@ -114,7 +114,7 @@
         })
       },
       fetchData() {
-        this.$axios.get(`/customers/${this.$route.params.id}`).then(res => {
+        this.$axios.get(`/vendors/${this.$route.params.id}`).then(res => {
           this.form.name = res.data.data.name
           this.form.first_name = res.data.data.user_detail.first_name
           this.form.last_name = res.data.data.user_detail.last_name

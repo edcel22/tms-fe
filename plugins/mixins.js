@@ -17,6 +17,17 @@ Vue.mixin({
                 target.classList.remove('filled')
             }
         },
+        orderStatus(value) {
+            if (value == 4) {
+                return 'Delivered'
+            } else if (value == 3) {
+                return "Active"
+            }  else if (value == 2) {
+                return "Sent to Vendor"
+            } else {
+                return "Pending"
+            }
+        },
         getDisabledDates() {
             let startDate = this.$moment().startOf('year'); // or any other date
             let endDate = this.$moment().subtract(1, 'days'); // yesterday
@@ -31,7 +42,7 @@ Vue.mixin({
             return disabledDates;
         },
         activeStatus(value) {
-            let status = (value) ? 'Active' : 'InActive'
+            let status = (value == 1) ? 'Active' : 'InActive'
             
             return status
         },

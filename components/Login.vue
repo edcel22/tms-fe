@@ -52,7 +52,7 @@ export default {
           if (valid) {
             this.$store.commit('global/loader/checkLoader', { status: true })
             this.$auth.loginWith('local', { data: this.form }).then(res => {
-              this.$router.push('/tasks')
+              this.$router.push('/customers')
             }).catch(err => {
               this.$store.commit('global/catcher/populateErrors', { items: [err.response.data.errors] })
             }).then(() => {
@@ -91,7 +91,7 @@ export default {
     },
     head () {
         return {
-            title: 'Welcome | Task Management System'
+            title: 'Welcome | Services Shop'
         }
     }
 }

@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'task-management-system-fe',
+    title: 'shop-services-panel',
     htmlAttrs: {
       lang: 'en'
     },
@@ -87,7 +87,7 @@ export default {
     },
     redirect: {
       login: '/',
-      home: '/tasks'
+      home: '/customers'
     }
   },
   router: {

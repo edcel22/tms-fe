@@ -1,5 +1,5 @@
 <template>
-  <div :class="[ 'task_management_system', (has_toggled) ? 'full' : '', (sidenavStatus) ? 'no_scroll no_click' : '' ]">
+  <div :class="[ 'shop_services_system', (has_toggled) ? 'full' : '', (sidenavStatus) ? 'no_scroll no_click' : '' ]">
 
        <transition name="fade">
           <topbar v-if="$auth.loggedIn" />
@@ -112,7 +112,7 @@
     },
     head () {
         return {
-            title: 'Task Management System',
+            title: 'Shop Services',
             script: [
             // { src: 'https://code.jquery.com/jquery-3.2.1.slim.min.js' },
             { src: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js' },
